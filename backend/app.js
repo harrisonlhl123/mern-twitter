@@ -3,11 +3,9 @@ const express = require("express");
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const cors = require('cors');
-const csurf = require('csurf');
-const { isProduction } = require('./config/keys');
-
 require('./models/User');
+require('./config/passport');
+const passport = require('passport');
 
 const usersRouter = require('./routes/api/users'); // update the import file path
 const tweetsRouter = require('./routes/api/tweets');
@@ -19,6 +17,11 @@ app.use(logger('dev')); // log request components (URL/method) to terminal
 app.use(express.json()); // parse JSON request body
 app.use(express.urlencoded({ extended: false })); // parse urlencoded request body
 app.use(cookieParser()); // parse cookies as an object on req.cookies
+
+app.use(passport.initialize());
+const cors = require('cors');
+const csurf = require('csurf');
+const { isProduction } = require('./config/keys');
 
 // Security Middleware
 if (!isProduction) {
