@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
 require('./models/User');
+require('./models/Tweet');
 require('./config/passport');
 const passport = require('passport');
 
