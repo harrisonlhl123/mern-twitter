@@ -70,4 +70,36 @@ router.post('/', requireUser, validateTweetInput, async (req, res, next) => {
     }
 });
 
+router.patch('/:id', requireUser, async (req, res, next) => {
+  try {
+    const tweet = await Tweet.findOneAndUpdate(
+      // Find the tweet by ID and ensure it belongs to the authenticated user
+      {_id: req.params.id, author: req.user._id},
+      {
+        // Use the $set operator to update the specified fields (in this case, the 'text' field)
+        $set: {
+          text: req.body.text
+        }
+      },
+      // Set { new: true } to return the updated document instead of the original one
+      {new: true}
+    );
+
+    // If the tweet is not found or the user is not authorized to update it, handle the error
+    if (!tweet){
+      const error = new Error('Tweet not found or unauthorized');
+      error.statusCode = 404;
+      error.errors = { message: 'No tweet found with that id or unauthorized access'};
+      return next(error);
+    }
+
+    // If the tweet is successfully updated, return the updated tweet in the response
+    return res.json(tweet)
+  } catch (err) {
+    // If an error occurs during the update process, pass it to the error handling middleware
+    next(err);
+  }
+
+});
+
 module.exports = router;

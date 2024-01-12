@@ -4,6 +4,7 @@ import { RECEIVE_USER_LOGOUT } from './session';
 const RECEIVE_TWEETS = "tweets/RECEIVE_TWEETS";
 const RECEIVE_USER_TWEETS = "tweets/RECEIVE_USER_TWEETS";
 const RECEIVE_NEW_TWEET = "tweets/RECEIVE_NEW_TWEET";
+const RECEIVE_TWEET = "tweets/RECEIVE_TWEET"
 const RECEIVE_TWEET_ERRORS = "tweets/RECEIVE_TWEET_ERRORS";
 const CLEAR_TWEET_ERRORS = "tweets/CLEAR_TWEET_ERRORS";
 
@@ -21,6 +22,11 @@ const receiveNewTweet = tweet => ({
   type: RECEIVE_NEW_TWEET,
   tweet
 });
+
+const receiveTweet = tweet => ({
+  type: RECEIVE_TWEET,
+  tweet
+})
 
 const receiveErrors = errors => ({
   type: RECEIVE_TWEET_ERRORS,
@@ -75,6 +81,21 @@ export const fetchTweets = () => async dispatch => {
     }
   };
 
+  export const updateTweet = (tweet) => async dispatch => {
+    const res = await jwtFetch((`/api/tweets/${tweet._id}`), {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(tweet)
+    })
+
+    if (res.ok) {
+      const tweet = await res.json()
+      dispatch(receiveTweet(tweet))
+    }
+  }
+
 
 const nullErrors = null;
 
@@ -99,11 +120,14 @@ const tweetsReducer = (state = { all: {}, user: {}, new: undefined }, action) =>
         return { ...state, user: action.tweets, new: undefined};
       case RECEIVE_NEW_TWEET:
         return { ...state, new: action.tweet};
+      case RECEIVE_TWEET:
+        return { ...state, all: {...state.all, [action.tweet._id]: action.tweet}, new: undefined}
       case RECEIVE_USER_LOGOUT:
         return { ...state, user: {}, new: undefined }
       default:
         return state;
     }
   };
+
   
   export default tweetsReducer;
