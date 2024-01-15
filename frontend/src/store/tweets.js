@@ -38,6 +38,13 @@ export const clearTweetErrors = errors => ({
     errors
 });
 
+export const getTweet = tweetId => state => {
+  // Assuming tweetId is a string
+  const tweetArray = state.tweets?.all || [];
+  const tweet = tweetArray.find(t => t._id == tweetId);
+  return tweet || null;
+};
+
 
 export const fetchTweets = () => async dispatch => {
     try {
@@ -51,6 +58,15 @@ export const fetchTweets = () => async dispatch => {
       }
     }
   };
+
+  export const fetchTweet = tweetId => async dispatch => {
+    const res = await jwtFetch(`api/tweets/${tweetId}`);
+
+    if (res.ok) {
+      const tweet = await res.json();
+      dispatch(receiveTweet(tweet));
+    }
+  }
   
   export const fetchUserTweets = id => async dispatch => {
     try {
