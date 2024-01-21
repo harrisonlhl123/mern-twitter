@@ -12,10 +12,6 @@ const EditTweet = ({tweetId, setShowModal}) => {
     const [text, setText] = useState(tweet.text);
     const history = useHistory();
 
-    useEffect(() => {
-        dispatch(fetchTweet(tweetId));
-    }, [tweetId])
-
 
     function changeBody(e) {
         setText(e.target.value)
@@ -25,7 +21,7 @@ const EditTweet = ({tweetId, setShowModal}) => {
         e.preventDefault();
         dispatch(updateTweet({_id: tweetId, text})).then(() => setShowModal(false));
     }
-
+      
     return(
         <>
             <form onSubmit={handleSubmit}>
