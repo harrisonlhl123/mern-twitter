@@ -2,13 +2,15 @@ import './EditTweet.css'
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTweet, getTweet, updateTweet } from '../../store/tweets'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 
-const EditTweet = ({tweetId}) => {
+const EditTweet = ({tweetId, setShowModal}) => {
 
     const dispatch = useDispatch();
     const tweet = useSelector(getTweet(tweetId));
     const [text, setText] = useState(tweet.text);
+    const history = useHistory();
 
     useEffect(() => {
         dispatch(fetchTweet(tweetId));
@@ -21,7 +23,7 @@ const EditTweet = ({tweetId}) => {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        dispatch(updateTweet({tweetId, text}))
+        dispatch(updateTweet({_id: tweetId, text})).then(() => setShowModal(false));
     }
 
     return(

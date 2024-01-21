@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserTweets, clearTweetErrors } from '../../store/tweets';
+import { fetchUserTweets, clearTweetErrors, getUserTweets } from '../../store/tweets';
 import TweetBox from '../Tweets/TweetBox';
 
 function Profile () {
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.session.user);
-  const userTweets = useSelector(state => Object.values(state.tweets.user))
+  const userTweets = useSelector(getUserTweets(currentUser._id))
   
   useEffect(() => {
     dispatch(fetchUserTweets(currentUser._id));

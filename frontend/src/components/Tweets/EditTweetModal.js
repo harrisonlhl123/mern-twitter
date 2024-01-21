@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Modal from '../Modal/Modal'
 import EditTweet from './EditTweet';
+import { Modal } from '../Modal/Modal';
 
 function EditTweetModal({tweetId}) {
     const [showModal, setShowModal] = useState(false);

@@ -1,19 +1,39 @@
-import './Modal.css'
-import React from 'react'
+import React, { useContext, useRef, useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+import './Modal.css';
 
-const Modal = ({onClose, isOpen, children}) => {
-    if(!isOpen) return null;
+const ModalContext = React.createContext();
 
-    const childSWithOnClose = React.cloneElement(children, {onClose})
+export function ModalProvider({ children }) {
+  const modalRef = useRef();
+  const [value, setValue] = useState();
 
-    return (
-        <>
-            <div className='modal-backdrop' onClick={onClose}></div>
-            <div className='modal-content'>
-                {childSWithOnClose}
-            </div>
-        </>
-    )
+  useEffect(() => {
+    setValue(modalRef.current);
+  }, [])
+
+  return (
+    <>
+      <ModalContext.Provider value={value}>
+        {children}
+      </ModalContext.Provider>
+      <div ref={modalRef} />
+    </>
+  );
 }
 
-export default Modal
+export function Modal({ onClose, children }) {
+  const modalNode = useContext(ModalContext);
+  if (!modalNode) return null;
+
+  return ReactDOM.createPortal(
+    <div id="modal">
+      <div id="modal-background" onClick={onClose} />
+      <div id="modal-content">
+        <button className="close-button" onClick={onClose}>X</button>
+        {children}
+      </div>
+    </div>,
+    modalNode
+  );
+}
