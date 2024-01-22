@@ -11,7 +11,13 @@ router.get('/', async (req, res) => {
     const tweets = await Tweet.find()
                               .populate("author", "_id username")
                               .sort({ createdAt: -1 });
-    return res.json(tweets);
+
+    let tweetsObject = {}
+    tweets.forEach((tweet) => {
+      tweetsObject[tweet._id] = tweet;
+    })
+
+    return res.json(tweetsObject);
   }
   catch(err) {
     return res.json([]);

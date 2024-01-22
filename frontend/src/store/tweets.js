@@ -6,6 +6,7 @@ const RECEIVE_USER_TWEETS = "tweets/RECEIVE_USER_TWEETS";
 const RECEIVE_TWEET = "tweets/RECEIVE_TWEET"
 const RECEIVE_TWEET_ERRORS = "tweets/RECEIVE_TWEET_ERRORS";
 const CLEAR_TWEET_ERRORS = "tweets/CLEAR_TWEET_ERRORS";
+const UPDATE_TWEET = "tweets/UPDATE_TWEET";
 
 const receiveTweets = tweets => ({
   type: RECEIVE_TWEETS,
@@ -26,6 +27,11 @@ const receiveErrors = errors => ({
   type: RECEIVE_TWEET_ERRORS,
   errors
 });
+
+const updateTweet = tweet => ({
+  type: UPDATE_TWEET,
+  tweet
+})
 
 export const clearTweetErrors = errors => ({
     type: CLEAR_TWEET_ERRORS,
@@ -96,7 +102,7 @@ export const fetchTweets = () => async dispatch => {
     }
   };
 
-  export const updateTweet = (tweet) => async dispatch => {
+  export const patchTweet = (tweet) => async dispatch => {
     const res = await jwtFetch((`/api/tweets/${tweet._id}`), {
       method: 'PATCH',
       headers: {
@@ -107,7 +113,7 @@ export const fetchTweets = () => async dispatch => {
 
     if (res.ok) {
       const tweet = await res.json()
-      dispatch(receiveTweet(tweet))
+      dispatch(updateTweet(tweet))
     }
   }
 
@@ -150,7 +156,9 @@ const tweetsReducer = (state = {}, action) => {
       case RECEIVE_TWEETS:
           return {...newState, ...action.tweets};
       case RECEIVE_TWEET:
-          return {...newState, [action.tweet._id]: action.tweet};         
+          return {[action.tweet._id]: action.tweet, ...newState};      
+      case UPDATE_TWEET:
+          return    {...newState, [action.tweet._id]: action.tweet};
       default:
           return state;
   }

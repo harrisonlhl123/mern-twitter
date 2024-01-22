@@ -13,7 +13,7 @@ function Tweets () {
   }, [dispatch])
 
   if (tweets.length === 0) return <div>There are no Tweets</div>;
-  
+
   return (
     <>
       <h2>All Tweets</h2>
