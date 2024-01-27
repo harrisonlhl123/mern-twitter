@@ -89,7 +89,7 @@ router.patch('/:id', requireUser, async (req, res, next) => {
       },
       // Set { new: true } to return the updated document instead of the original one
       {new: true}
-    );
+    ).populate('author', '_id username');
 
     // If the tweet is not found or the user is not authorized to update it, handle the error
     if (!tweet){
