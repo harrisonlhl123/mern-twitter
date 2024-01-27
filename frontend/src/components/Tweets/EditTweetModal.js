@@ -9,7 +9,7 @@ function EditTweetModal({tweetId}) {
         <>
             <button onClick={() => {setShowModal(true)}}>Edit</button>
             {showModal && (
-                <Modal>
+                <Modal onClose={() => setShowModal(false)}>
                     <EditTweet tweetId={tweetId} setShowModal={setShowModal} />
                 </Modal>
             )}
