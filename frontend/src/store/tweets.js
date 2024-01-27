@@ -7,6 +7,7 @@ const RECEIVE_TWEET = "tweets/RECEIVE_TWEET"
 const RECEIVE_TWEET_ERRORS = "tweets/RECEIVE_TWEET_ERRORS";
 const CLEAR_TWEET_ERRORS = "tweets/CLEAR_TWEET_ERRORS";
 const UPDATE_TWEET = "tweets/UPDATE_TWEET";
+const REMOVE_TWEET = "tweets/REMOVE_TWEET";
 
 const receiveTweets = tweets => ({
   type: RECEIVE_TWEETS,
@@ -31,6 +32,11 @@ const receiveErrors = errors => ({
 const updateTweet = tweet => ({
   type: UPDATE_TWEET,
   tweet
+})
+
+const removeTweet = tweetId => ({
+  type: REMOVE_TWEET,
+  tweetId
 })
 
 export const clearTweetErrors = errors => ({
@@ -117,6 +123,16 @@ export const fetchTweets = () => async dispatch => {
     }
   }
 
+export const deleteTweet = (tweetId) => async dispatch => {
+  const res = await jwtFetch((`/api/tweets/${tweetId}`), {
+    method: "DELETE"
+  })
+
+  if (res.ok) {
+    dispatch(removeTweet(tweetId))
+  }
+}
+
 
 const nullErrors = null;
 
@@ -159,6 +175,9 @@ const tweetsReducer = (state = {}, action) => {
           return {[action.tweet._id]: action.tweet, ...newState};      
       case UPDATE_TWEET:
           return    {...newState, [action.tweet._id]: action.tweet};
+      case REMOVE_TWEET:
+        delete newState[action.tweetId]
+        return newState
       default:
           return state;
   }
