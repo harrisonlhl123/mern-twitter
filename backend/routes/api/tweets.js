@@ -108,4 +108,22 @@ router.patch('/:id', requireUser, async (req, res, next) => {
 
 });
 
+router.delete('/:id', requireUser, async (req, res, next) => {
+  try {
+    const tweet = await Tweet.findOneAndDelete({
+      _id: req.params.id,
+      author: req.user._id
+    });
+    if (!tweet){
+      const error = new Error('Tweet not found or unauthorized')
+      error.statusCode = 404;
+      error.errors = { message: 'No tweet found with that id or unauthorized access' };
+      return next(error);
+    }
+    return res.json({ message: 'Tweet deleted successfully' });
+  } catch(err) {
+    next(err);
+  }
+})
+
 module.exports = router;
