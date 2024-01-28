@@ -7,9 +7,9 @@ const handleValidationErrors = require('./handleValidationErrors');
 const validateCommentInput = [
   check('text')
     .exists({ checkFalsy: true })
-    .isLength({ min: 5, max: 140 })
-    .withMessage('Tweet must be between 5 and 140 characters'),
+    // .isLength({ min: 5, max: 140 })
+    .withMessage("Comment can't be blank"),
   handleValidationErrors
 ];
 
-module.exports = validateTweetInput;
+module.exports = validateCommentInput;
