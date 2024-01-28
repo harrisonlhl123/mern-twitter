@@ -11,13 +11,13 @@ router.post('/', requireUser, async (req, res, next) => {
     try {
         const newComment = new Comment({
             text: req.body.text,
-            user: req.user._id,
+            user: req.body.user,
             tweet: req.body.tweet
         });
 
         let comment = await newComment.save();
-        comment = await comment.populate('user', '_id name');
-        await comment.populate('tweet', '_id');
+        comment = await comment.populate('user', '_id username');
+        await comment.populate('tweet', '_id text');
 
         return res.json(comment);
     } catch (err) {
