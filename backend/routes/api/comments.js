@@ -25,4 +25,24 @@ router.post('/', requireUser, async (req, res, next) => {
     }
 });
 
+router.get('/tweet/:tweetId', async (req, res, next) => {
+    let tweet;
+    try{
+        tweet = await Tweet.findById(req.params.tweetId);
+    } catch(err) {
+        const error = new Error("Tweet not found");
+        error.statusCode = 404;
+        error.errors = { message: "No tweet found with that id" };
+        return next(error);
+    }
+    try{
+        const comments = await Tweet.find({ tweet: tweet._id })
+        .populate("user", "_id name");
+        return res.json(comments);
+    }
+    catch(err) {
+        return res.json([]);
+    }
+});
+
 module.exports = router;
