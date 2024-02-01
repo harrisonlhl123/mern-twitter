@@ -13,6 +13,8 @@ const receiveComment = comment => ({
     comment
 })
 
+export const getComments = state => state.comments ? state.comments : [];
+
 export const fetchComments = (tweetId) => async dispatch => {
     const res = await jwtFetch(`/api/comments/tweet/${tweetId}`)
 

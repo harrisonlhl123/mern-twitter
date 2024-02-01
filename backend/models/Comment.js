@@ -4,15 +4,17 @@ const Schema = mongoose.Schema;
 const commentSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   tweet: {
     type: Schema.Types.ObjectId,
-    ref: 'Tweet'
+    ref: 'Tweet',
+    required: true
   },
   text: {
     type: String,
-    required: true
+    required: true,
   }
 }, {
   timestamps: true
