@@ -36,7 +36,7 @@ router.get('/tweet/:tweetId', async (req, res, next) => {
         return next(error);
     }
     try{
-        const comments = await Tweet.find({ tweet: tweet._id })
+        const comments = await Comment.find({ tweet: tweet._id })
         .populate("user", "_id name");
         return res.json(comments);
     }
