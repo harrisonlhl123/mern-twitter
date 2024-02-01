@@ -27,7 +27,7 @@ function TweetBox ({ tweet: { _id, text, author }}) {
         </>
       )}
 
-      {/* <AllComments tweetId={_id}/> */}
+      <AllComments tweetId={_id} />
 
       <MakeComment tweetId={_id}/>
     </div>

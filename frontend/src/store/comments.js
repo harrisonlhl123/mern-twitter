@@ -51,6 +51,8 @@ const commentsReducer = (state = {}, action) => {
                 comments[comment._id] = comment
             })
             return comments;
+        default:
+            return state;
     }
 }
 
