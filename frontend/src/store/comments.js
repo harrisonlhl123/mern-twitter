@@ -46,11 +46,12 @@ const commentsReducer = (state = {}, action) => {
         case RECEIVE_COMMENT:
             return {...newState, [action.comment._id]: action.comment};
         case RECEIVE_COMMENTS:
-            let comments = {}
-            action.comments.forEach((comment) => {
-                comments[comment._id] = comment
-            })
-            return comments;
+            // let comments = {}
+            // action.comments.forEach((comment) => {
+            //     comments[comment._id] = comment
+            // })
+            // return comments;
+            return {...newState, ...action.tweets};
         default:
             return state;
     }
