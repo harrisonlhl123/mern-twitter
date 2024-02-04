@@ -7,20 +7,22 @@ const AllComments = ({tweetId}) => {
 
     
     useEffect(() => {
-        dispatch(fetchComments(tweetId));
+        if (tweetId) {
+            dispatch(fetchComments(tweetId));
+        }
     }, [tweetId]);
     
     const allComments = useSelector(getComments);
     // Filter comments based on the tweetId
-    const comments = Object.values(allComments).filter(
-      (comment) => comment.tweet === tweetId
-    );
+    const comments = tweetId
+    ? Object.values(allComments).filter((comment) => comment.tweet === tweetId)
+    : [];
 
     return (
         <>
             <ul>
                 {comments.map((comment) => (
-                    <li key={comment._id}>{comment.text}</li>
+                    <li key={comment._id}>{comment.user.username}: {comment.text}</li>
                 ))}
             </ul>
         </>

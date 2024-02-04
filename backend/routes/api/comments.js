@@ -41,12 +41,13 @@ router.get('/tweet/:tweetId', async (req, res, next) => {
     }
     try{
         const comments = await Comment.find({ tweet: tweet._id })
-        .populate("user", "_id name");
+        .populate("user", "_id username");
         return res.json(comments);
     }
     catch(err) {
         return res.json([]);
     }
 });
+
 
 module.exports = router;
