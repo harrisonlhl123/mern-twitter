@@ -21,6 +21,7 @@ export const fetchComments = (tweetId) => async dispatch => {
     if (res.ok) {
         const comments = await res.json()
         dispatch(receiveComments(comments))
+        // debugger
     }
 }
 
@@ -51,7 +52,11 @@ const commentsReducer = (state = {}, action) => {
             //     comments[comment._id] = comment
             // })
             // return comments;
-            return {...newState, ...action.tweets};
+            const commentsMap = {};
+            action.comments.forEach((comment) => {
+              commentsMap[comment._id] = comment;
+            });
+            return { ...newState, ...commentsMap };
         default:
             return state;
     }

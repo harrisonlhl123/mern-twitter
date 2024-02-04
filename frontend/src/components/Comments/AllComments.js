@@ -10,14 +10,18 @@ const AllComments = ({tweetId}) => {
         dispatch(fetchComments(tweetId));
     }, [tweetId]);
     
-    const comments = useSelector(getComments)
+    const allComments = useSelector(getComments);
+    // Filter comments based on the tweetId
+    const comments = Object.values(allComments).filter(
+      (comment) => comment.tweet === tweetId
+    );
 
     return (
         <>
             <ul>
-            {Object.values(comments).map((comment) => (
-                <li key={comment._id}>{comment.text}</li>
-            ))}
+                {comments.map((comment) => (
+                    <li key={comment._id}>{comment.text}</li>
+                ))}
             </ul>
         </>
     )

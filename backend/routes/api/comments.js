@@ -17,7 +17,11 @@ router.post('/', requireUser, async (req, res, next) => {
 
         let comment = await newComment.save();
         comment = await comment.populate('user', '_id username');
-        await comment.populate('tweet', '_id text');
+        // await comment.populate('tweet', '_id');
+        comment = {
+            ...comment.toJSON(),
+            tweet: comment.tweet._id,
+        };
 
         return res.json(comment);
     } catch (err) {
