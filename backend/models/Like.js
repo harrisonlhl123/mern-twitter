@@ -15,7 +15,7 @@ const likeSchema = new Schema({
     // Indicate the type of the liked item: 'Tweet' or 'Comment'
     likeableType: {
         type: String,
-        enum: ['Tweet', 'Comment'],
+        enum: ['tweet', 'comment'],
         required: true
     }
 }, {
