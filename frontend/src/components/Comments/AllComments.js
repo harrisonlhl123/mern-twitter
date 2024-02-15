@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react';
 import { fetchComments, getComments } from '../../store/comments';
+import OneComment from './OneComment'
 
 const AllComments = ({tweetId}) => {
     const dispatch = useDispatch();
@@ -22,7 +23,11 @@ const AllComments = ({tweetId}) => {
         <>
             <ul>
                 {comments.map((comment) => (
-                    <li key={comment._id}>{comment.user.username}: {comment.text}</li>
+                    // <li key={comment._id}>{comment.user.username}: {comment.text}</li>
+                    <>
+                        <OneComment key={comment._id} comment={comment} />
+                        <br></br>
+                    </>
                 ))}
             </ul>
         </>

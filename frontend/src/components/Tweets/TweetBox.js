@@ -26,7 +26,6 @@ function TweetBox ({ tweet: { _id, text, author }}) {
   const userliked = likesForTweet.some((like) => like.user == currentUser._id )
   //finds the actual like in the array and sets it to likeByUser
   const likeByUser = likesForTweet.find((like) => like.user == currentUser._id)
-  // debugger
 
   function handleUnlikeClick(e) {
       e.preventDefault();
