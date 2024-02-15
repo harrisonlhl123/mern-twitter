@@ -30,18 +30,14 @@ export const getCommentLikes = commentId => state => Object.values(state.likes)
     .filter(like => like.likeable == commentId && like.likeableType == 'comment');
 
 
-export const fetchLikes = () => async dispatch => {
-    try {
-        const res = await jwtFetch ('/api/likes/');
-        const likes = await res.json();
-        dispatch(receiveLikes(likes));
-    } catch (err) {
-        const resBody = await err.json();
-        if (resBody.statusCode === 400) {
-        dispatch(receiveErrors(resBody.errors));
-        }
+export const fetchLikes = () => async (dispatch) => {
+    const response = await jwtFetch('/api/likes')
+
+    if(response.ok){
+        const likes = await response.json()
+        dispatch(receiveLikes(likes))
     }
-};
+}
 
 export const fetchLike = likeId => async dispatch => {
     const res = await jwtFetch(`api/likes/${likeId}`);
