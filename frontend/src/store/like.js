@@ -30,15 +30,73 @@ export const getCommentLikes = commentId => state => Object.values(state.likes)
     .filter(like => like.likeable == commentId && like.likeableType == 'comment');
 
 
-export const fetchTweets = () => async dispatch => {
+export const fetchLikes = () => async dispatch => {
     try {
         const res = await jwtFetch ('/api/likes/');
-        const tweets = await res.json();
-        dispatch(receiveTweets(tweets));
+        const likes = await res.json();
+        dispatch(receiveLikes(likes));
     } catch (err) {
         const resBody = await err.json();
         if (resBody.statusCode === 400) {
         dispatch(receiveErrors(resBody.errors));
         }
     }
-    };
+};
+
+export const fetchLike = likeId => async dispatch => {
+    const res = await jwtFetch(`api/likes/${likeId}`);
+
+    if (res.ok) {
+      const like = await res.json();
+      dispatch(receiveLike(like));
+    }
+}
+
+
+export const createLike = (like) => async dispatch => {
+    const res = await jwtFetch(('/api/likes/'), {
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(like)
+    })
+
+    if (res.ok) {
+        const like = await res.json()
+        dispatch(receiveLike(like))
+    }
+}
+
+export const deleteLike = (likeId) => async (dispatch) => {
+    const response = await jwtFetch(`/api/likes/${likeId}`, {
+        method: 'DELETE',
+    })
+
+    if(response.ok){
+        dispatch(removeLike(likeId))
+    }
+}
+
+const likesReducer = (state = {}, action) => {
+    const newState = {...state};
+
+    switch(action.type){
+        case RECEIVE_LIKES:
+            return {...action.likes};
+        case RECEIVE_LIKE:
+            return {...newState, [action.like._id]: action.like};
+        case REMOVE_LIKE:
+            delete newState[action.likeId];
+            return newState;
+        default:
+            return state;
+    }
+}
+
+export default likesReducer
+
+
+
+
+
