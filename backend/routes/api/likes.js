@@ -42,4 +42,36 @@ router.delete('/:id', requireUser, async (req, res, next) => {
     }
   })
 
+router.get('/', async (req, res) => {
+  try {
+    const likes = await Like.find()
+                              // .populate("author", "_id username")
+                              .sort({ createdAt: -1 });
+
+    let likesObject = {}
+    likes.forEach((like) => {
+      likesObject[like._id] = like;
+    })
+
+    return res.json(likesObject);
+  }
+  catch(err) {
+    return res.json([]);
+  }
+});
+
+router.get('/:id', async (req, res, next) => {
+  try {
+    const like = await Like.findById(req.params.id)
+                            //  .populate("author", "_id username");
+    return res.json(like);
+  }
+  catch(err) {
+    const error = new Error('Like not found');
+    error.statusCode = 404;
+    error.errors = { message: "No like found with that id" };
+    return next(error);
+  }
+});
+
 module.exports = router;
