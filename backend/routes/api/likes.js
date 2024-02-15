@@ -17,7 +17,8 @@ router.post('/', requireUser, async (req, res, next) => {
         });
 
         let like = await newLike.save();
-        like = await like.populate('user', '_id username');
+        // like = await like.populate('user', '_id');
+        like.user = like.user._id;
         return res.json(like);
     } catch (err) {
         next(err);
