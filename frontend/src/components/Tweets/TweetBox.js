@@ -14,14 +14,10 @@ function TweetBox ({ tweet: { _id, text, author }}) {
 
   let likesForTweet = useSelector(getTweetLikes(_id))
 
-  let numOfLikes = likesForTweet.length ? (
-    <>
-        <i className="fa-solid fa-thumbs-up"></i> {likesForTweet.length}
-    </>
-  ) : null;
+  let numOfLikes = likesForTweet.length ? likesForTweet.length : null;
 
-  const userliked = likesForTweet.some((like) => like.user == currentUser?.id )
-  const likeByUser = likesForTweet.find((like) => like.user == currentUser?.id)
+  const userliked = likesForTweet.some((like) => like.user._id == currentUser._id )
+  const likeByUser = likesForTweet.find((like) => like.user._id == currentUser._id)
 
   function handleUnlikeClick(e) {
       e.preventDefault();
@@ -73,3 +69,4 @@ function TweetBox ({ tweet: { _id, text, author }}) {
 }
 
 export default TweetBox;
+
