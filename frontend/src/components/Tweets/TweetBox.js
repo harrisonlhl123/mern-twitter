@@ -1,16 +1,22 @@
 import "./TweetBox.css"
 import EditTweetModal from "./EditTweetModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTweet } from "../../store/tweets";
 import MakeComment from "../Comments/MakeComment";
 import AllComments from "../Comments/AllComments";
-import { getTweetLikes, deleteLike, createLike } from "../../store/like";
+import { getTweetLikes, deleteLike, createLike, fetchLikes } from "../../store/like";
 
 function TweetBox ({ tweet: { _id, text, author }}) {
   const { username } = author;
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.session.user)
+
+  useEffect(() => {
+    if (_id) {
+        dispatch(fetchLikes(_id));
+    }
+  }, [_id]);
 
   let likesForTweet = useSelector(getTweetLikes(_id))
 
